@@ -32,4 +32,4 @@ COPY --from=builder /app/dist ./dist
 
 # Copying the public directory
 EXPOSE 3000
-CMD ["node", "dist/main.ts"]
+CMD ["node", "dist/main.js"]

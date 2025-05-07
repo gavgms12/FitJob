@@ -7,7 +7,7 @@
 // schema.prisma
 
 datasource db {
-  provider = "postgresql" // ou "mysql" dependendo do seu banco de dados
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -16,41 +16,41 @@ generator client {
 }
 
 model Usuario {
-  id        String   @id @default(cuid())
-  nome      String
-  email     String   @unique
-  senha     String
-  criadoEm  DateTime @default(now())
-  curriculos Curriculo[]
-  candidaturas Candidatura[]
+  id                 String              @id @default(cuid())
+  nome               String
+  email              String              @unique
+  senha              String
+  criadoEm           DateTime            @default(now())
+  curriculos         Curriculo[]
+  candidaturas       Candidatura[]
+  caracteristicaVaga CaracteristicaVaga?
 }
 
 model CaracteristicaVaga {
-  usuarioId           String
-  modeloTrabalho      String
-  localizacao         String
-  salarioDesejadoMin  Float
-  salarioDesejadoMax  Float
+  usuarioId          String
+  modeloTrabalho     String
+  localizacao        String
+  salarioDesejadoMin Float
+  salarioDesejadoMax Float
   usuario            Usuario @relation(fields: [usuarioId], references: [id])
-  
+
   @@id([usuarioId])
 }
 
 model Curriculo {
-  id           String   @id @default(cuid())
-  usuarioId    String
-  conteudo     String
-  habilidades  String[]
-  softSkills   String[]
-  criadoEm     DateTime @default(now())
-  
-  usuario      Usuario @relation(fields: [usuarioId], references: [id])
-  candidaturas Candidatura[]
-
+  id                String             @id @default(cuid())
+  usuarioId         String
+  conteudo          String
+  habilidades       String[]
+  softSkills        String[]
+  criadoEm          DateTime           @default(now())
+  usuario           Usuario            @relation(fields: [usuarioId], references: [id])
+  candidaturas      Candidatura[]
+  resultadoAnalises ResultadoAnalise[]
 }
 
 model Vaga {
-  id                   String   @id @default(cuid())
+  id                   String             @id @default(cuid())
   titulo               String
   descricao            String
   empresa              String
@@ -58,33 +58,33 @@ model Vaga {
   localizacao          String
   salario              Float
   requisitosHardSkills String[]
-  
   candidaturas         Candidatura[]
+  resultadoAnalises    ResultadoAnalise[]
 }
 
 model ResultadoAnalise {
-  id                     String   @id @default(cuid())
-  curriculoId            String
-  vagaId                 String
+  id                         String      @id @default(cuid())
+  curriculoId                String
+  vagaId                     String
+  candidaturaId              String
   porcentagemCompatibilidade Float
-  palavrasChaveFaltando  String[]
-  sugestoesMelhoria      String[]
-  data                   DateTime @default(now())
-  
-  curriculo              Curriculo @relation(fields: [curriculoId], references: [id])
-  vaga                   Vaga @relation(fields: [vagaId], references: [id])
+  palavrasChaveFaltando      String[]
+  sugestoesMelhoria          String[]
+  data                       DateTime    @default(now())
+  curriculo                  Curriculo   @relation(fields: [curriculoId], references: [id])
+  vaga                       Vaga        @relation(fields: [vagaId], references: [id])
+  candidatura                Candidatura @relation(fields: [candidaturaId], references: [id])
 }
 
 model Candidatura {
-  id               String   @id @default(cuid())
-  usuarioId        String
-  curriculoId      String
-  vagaId           String
-  dataCandidatura  DateTime @default(now())
-  status           String
-  resultadoAnalise ResultadoAnalise?
-  
-  usuario          Usuario @relation(fields: [usuarioId], references: [id])
-  curriculo        Curriculo @relation(fields: [curriculoId], references: [id])
-  vaga             Vaga @relation(fields: [vagaId], references: [id])
+  id                String             @id @default(cuid())
+  usuarioId         String
+  curriculoId       String
+  vagaId            String
+  dataCandidatura   DateTime           @default(now())
+  status            String
+  resultadoAnalises ResultadoAnalise[] // Alterado para um array
+  usuario           Usuario            @relation(fields: [usuarioId], references: [id])
+  curriculo         Curriculo          @relation(fields: [curriculoId], references: [id])
+  vaga              Vaga               @relation(fields: [vagaId], references: [id])
 }
