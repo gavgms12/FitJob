@@ -1,0 +1,22 @@
+export enum SoftSkills {
+  COMUNICACAO = "Comunicação efetiva",
+  TRABALHO_EQUIPE = "Trabalho em equipe",
+  LIDERANCA = "Liderança",
+  RESOLUCAO_PROBLEMAS = "Resolução de problemas",
+  CRIATIVIDADE = "Criatividade",
+  ADAPTABILIDADE = "Adaptabilidade",
+  ORGANIZACAO = "Organização",
+  PENSAMENTO_CRITICO = "Pensamento crítico",
+  EMPATIA = "Empatia",
+  GESTAO_TEMPO = "Gestão de tempo",
+  PROATIVIDADE = "Proatividade",
+  RESILIENCIA = "Resiliência",
+  FLEXIBILIDADE = "Flexibilidade",
+  INTELIGENCIA_EMOCIONAL = "Inteligência emocional",
+  NEGOCIACAO = "Negociação",
+  TOMADA_DECISAO = "Tomada de decisão",
+  APRENDIZADO_CONTINUO = "Aprendizado contínuo",
+  NETWORKING = "Networking",
+  GERENCIAMENTO_STRESS = "Gerenciamento de stress",
+  PENSAMENTO_ANALITICO = "Pensamento analítico"
+} 

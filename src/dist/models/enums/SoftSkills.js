@@ -1,0 +1,26 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SoftSkills = void 0;
+var SoftSkills;
+(function (SoftSkills) {
+    SoftSkills["COMUNICACAO"] = "Comunica\u00E7\u00E3o efetiva";
+    SoftSkills["TRABALHO_EQUIPE"] = "Trabalho em equipe";
+    SoftSkills["LIDERANCA"] = "Lideran\u00E7a";
+    SoftSkills["RESOLUCAO_PROBLEMAS"] = "Resolu\u00E7\u00E3o de problemas";
+    SoftSkills["CRIATIVIDADE"] = "Criatividade";
+    SoftSkills["ADAPTABILIDADE"] = "Adaptabilidade";
+    SoftSkills["ORGANIZACAO"] = "Organiza\u00E7\u00E3o";
+    SoftSkills["PENSAMENTO_CRITICO"] = "Pensamento cr\u00EDtico";
+    SoftSkills["EMPATIA"] = "Empatia";
+    SoftSkills["GESTAO_TEMPO"] = "Gest\u00E3o de tempo";
+    SoftSkills["PROATIVIDADE"] = "Proatividade";
+    SoftSkills["RESILIENCIA"] = "Resili\u00EAncia";
+    SoftSkills["FLEXIBILIDADE"] = "Flexibilidade";
+    SoftSkills["INTELIGENCIA_EMOCIONAL"] = "Intelig\u00EAncia emocional";
+    SoftSkills["NEGOCIACAO"] = "Negocia\u00E7\u00E3o";
+    SoftSkills["TOMADA_DECISAO"] = "Tomada de decis\u00E3o";
+    SoftSkills["APRENDIZADO_CONTINUO"] = "Aprendizado cont\u00EDnuo";
+    SoftSkills["NETWORKING"] = "Networking";
+    SoftSkills["GERENCIAMENTO_STRESS"] = "Gerenciamento de stress";
+    SoftSkills["PENSAMENTO_ANALITICO"] = "Pensamento anal\u00EDtico";
+})(SoftSkills || (exports.SoftSkills = SoftSkills = {}));

@@ -7,8 +7,8 @@
 // schema.prisma
 
 datasource db {
-  provider = "postgresql" // ou "mysql" dependendo do seu banco de dados
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 generator client {
@@ -16,37 +16,36 @@ generator client {
 }
 
 model Usuario {
-  id        String   @id @default(cuid())
-  nome      String
-  email     String   @unique
-  senha     String
-  criadoEm  DateTime @default(now())
-  curriculos Curriculo[]
-  candidaturas Candidatura[]
+  id            String   @id @default(cuid())
+  nome          String
+  email         String   @unique
+  senha         String
+  criadoEm      DateTime @default(now())
+  curriculos    Curriculo[]
+  candidaturas  Candidatura[]
+  caracteristicaVaga CaracteristicaVaga?
 }
 
 model CaracteristicaVaga {
-  usuarioId           String
+  usuarioId           String   @id
   modeloTrabalho      String
   localizacao         String
   salarioDesejadoMin  Float
   salarioDesejadoMax  Float
-  usuario            Usuario @relation(fields: [usuarioId], references: [id])
-  
-  @@id([usuarioId])
+  usuario             Usuario  @relation(fields: [usuarioId], references: [id])
 }
 
 model Curriculo {
   id           String   @id @default(cuid())
   usuarioId    String
   conteudo     String
-  habilidades  String[]
-  softSkills   String[]
+  habilidades  String   // Armazenado como JSON
+  softSkills   String   // Armazenado como JSON
   criadoEm     DateTime @default(now())
   
   usuario      Usuario @relation(fields: [usuarioId], references: [id])
   candidaturas Candidatura[]
-
+  resultadosAnalise ResultadoAnalise[]
 }
 
 model Vaga {
@@ -57,34 +56,38 @@ model Vaga {
   modeloTrabalho       String
   localizacao          String
   salario              Float
-  requisitosHardSkills String[]
+  requisitosHardSkills String   // Armazenado como JSON
+  requisitosSoftSkills String   // Armazenado como JSON
   
   candidaturas         Candidatura[]
+  resultadosAnalise    ResultadoAnalise[]
 }
 
 model ResultadoAnalise {
-  id                     String   @id @default(cuid())
-  curriculoId            String
-  vagaId                 String
+  id                       String   @id @default(cuid())
+  curriculoId             String
+  vagaId                  String
   porcentagemCompatibilidade Float
-  palavrasChaveFaltando  String[]
-  sugestoesMelhoria      String[]
-  data                   DateTime @default(now())
+  palavrasChaveFaltando    String   // Armazenado como JSON
+  sugestoesMelhoria        String   // Armazenado como JSON
+  data                     DateTime @default(now())
   
-  curriculo              Curriculo @relation(fields: [curriculoId], references: [id])
-  vaga                   Vaga @relation(fields: [vagaId], references: [id])
+  curriculo                Curriculo @relation(fields: [curriculoId], references: [id])
+  vaga                     Vaga      @relation(fields: [vagaId], references: [id])
+  candidatura             Candidatura?
 }
 
 model Candidatura {
-  id               String   @id @default(cuid())
-  usuarioId        String
-  curriculoId      String
-  vagaId           String
-  dataCandidatura  DateTime @default(now())
-  status           String
-  resultadoAnalise ResultadoAnalise?
+  id                String   @id @default(cuid())
+  usuarioId         String
+  curriculoId       String
+  vagaId            String
+  dataCandidatura   DateTime @default(now())
+  status            String
+  resultadoAnaliseId String? @unique
   
-  usuario          Usuario @relation(fields: [usuarioId], references: [id])
-  curriculo        Curriculo @relation(fields: [curriculoId], references: [id])
-  vaga             Vaga @relation(fields: [vagaId], references: [id])
+  usuario           Usuario @relation(fields: [usuarioId], references: [id])
+  curriculo         Curriculo @relation(fields: [curriculoId], references: [id])
+  vaga              Vaga @relation(fields: [vagaId], references: [id])
+  resultadoAnalise  ResultadoAnalise? @relation(fields: [resultadoAnaliseId], references: [id])
 }
