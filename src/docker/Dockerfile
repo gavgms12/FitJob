@@ -12,6 +12,7 @@ RUN npm ci
 # Copying the source code
 COPY . .
 
+# Generate Prisma client
 RUN npx prisma generate --schema=./db/prisma/schema.prisma || true
 
 # Build the application
