@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
-const router = express.Router();
+const router = Router();
 const prisma = new PrismaClient();
 
 // Listar todas as vagas
@@ -115,4 +115,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-export { router }; 
+export default router; 

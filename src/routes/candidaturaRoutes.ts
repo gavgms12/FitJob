@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { CandidaturaDTO } from '../types';
 
-const router = express.Router();
+const router = Router();
 const prisma = new PrismaClient();
 
 // Listar todas as candidaturas
@@ -99,4 +99,4 @@ router.delete('/:id', async (req: Request<{ id: string }>, res: Response) => {
   }
 });
 
-export { router }; 
+export default router; 

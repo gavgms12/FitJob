@@ -8,16 +8,16 @@ async function main() {
   // Criar usuário
   const usuario = await prisma.usuario.create({
     data: {
-      nome: 'João Silva',
-      email: 'joao@example.com',
-      senha: 'senha123', // Em produção, usar hash
+      nome: 'Maria Santos',
+      email: 'maria.santos@email.com',
+      senha: 'senha456', // Em produção, usar hash
       criadoEm: new Date(),
       caracteristicaVaga: {
         create: {
-          modeloTrabalho: 'Híbrido',
-          localizacao: 'São Paulo, SP',
-          salarioDesejadoMin: 8000,
-          salarioDesejadoMax: 15000
+          modeloTrabalho: 'Remoto',
+          localizacao: 'Belo Horizonte, MG',
+          salarioDesejadoMin: 6000,
+          salarioDesejadoMax: 12000
         }
       }
     }
@@ -29,37 +29,37 @@ async function main() {
       usuarioId: usuario.id,
       conteudo: `EXPERIÊNCIA PROFISSIONAL
 
-      Desenvolvedor Full Stack Senior - TechCorp | 2020-2023
-      - Desenvolvimento de aplicações web usando React, TypeScript e Node.js
-      - Implementação de microsserviços e APIs RESTful
-      - Utilização de Docker e AWS para deploy
-      - Liderança de equipe de 5 desenvolvedores
+      UX/UI Designer Senior - DesignLab | 2021-2024
+      - Design de interfaces para aplicativos móveis e web
+      - Condução de pesquisas de usuário e testes de usabilidade
+      - Criação de protótipos interativos usando Figma
+      - Mentoria de designers júnior
       
-      Desenvolvedor Full Stack - DevInc | 2018-2020
-      - Desenvolvimento full stack com Node.js e React
-      - Trabalho com PostgreSQL e MongoDB
-      - Implementação de testes automatizados
+      Product Designer - CreativeTech | 2019-2021
+      - Design de produtos digitais
+      - Colaboração com times de desenvolvimento
+      - Implementação de design system
       
       FORMAÇÃO
-      Bacharel em Ciência da Computação - UNIFEI | 2018
+      Bacharel em Design Digital - UFMG | 2019
       
       CERTIFICAÇÕES
-      - AWS Certified Developer Associate
-      - Docker Certified Associate
-      - Scrum Master Certified`,
+      - Google UX Design Professional Certificate
+      - Design Thinking Professional
+      - Agile UX Practitioner`,
       habilidades: JSON.stringify([
-        HardSkills.TYPESCRIPT,
+        HardSkills.FIGMA,
+        HardSkills.HTML,
+        HardSkills.CSS,
         HardSkills.REACT,
-        HardSkills.NODE_JS,
-        HardSkills.POSTGRESQL,
-        HardSkills.AWS,
-        HardSkills.DOCKER
+        HardSkills.TYPESCRIPT,
+        HardSkills.AGILE
       ]),
       softSkills: JSON.stringify([
+        SoftSkills.CRIATIVIDADE,
         SoftSkills.COMUNICACAO,
-        SoftSkills.TRABALHO_EQUIPE,
-        SoftSkills.LIDERANCA,
-        SoftSkills.RESOLUCAO_PROBLEMAS
+        SoftSkills.EMPATIA,
+        SoftSkills.PENSAMENTO_CRITICO
       ])
     }
   });
@@ -67,38 +67,39 @@ async function main() {
   // Criar vaga
   const vaga = await prisma.vaga.create({
     data: {
-      titulo: 'Desenvolvedor Full Stack Senior',
-      descricao: `Procuramos um Desenvolvedor Full Stack Senior apaixonado por tecnologia e inovação.
+      titulo: 'UX/UI Designer Senior',
+      descricao: `Estamos em busca de um(a) UX/UI Designer Senior para liderar projetos de design.
 
       Responsabilidades:
-      - Desenvolver e manter aplicações web complexas
-      - Liderar time de desenvolvimento
-      - Implementar boas práticas de desenvolvimento
-      - Participar de decisões arquiteturais
+      - Criar interfaces intuitivas e atraentes
+      - Conduzir pesquisas com usuários
+      - Desenvolver e manter design system
+      - Mentoria de designers júnior
+      - Colaborar com times multidisciplinares
 
       Requisitos:
-      - Sólida experiência com TypeScript, React e Node.js
-      - Conhecimento em PostgreSQL e AWS
-      - Experiência com Docker e práticas DevOps
-      - Experiência com liderança de equipe
-      - Boa comunicação e trabalho em equipe`,
-      empresa: 'TechCorp Brasil',
-      modeloTrabalho: 'Híbrido',
-      localizacao: 'São Paulo, SP',
-      salario: 15000,
+      - Experiência sólida com Figma e ferramentas de design
+      - Conhecimento em metodologias ágeis
+      - Portfolio comprovando experiência
+      - Habilidade em conduzir workshops de design
+      - Experiência com design responsivo`,
+      empresa: 'DesignLab Brasil',
+      modeloTrabalho: 'Remoto',
+      localizacao: 'Belo Horizonte, MG',
+      salario: 12000,
       requisitosHardSkills: JSON.stringify([
-        HardSkills.TYPESCRIPT,
+        HardSkills.FIGMA,
+        HardSkills.HTML,
+        HardSkills.CSS,
         HardSkills.REACT,
-        HardSkills.NODE_JS,
-        HardSkills.POSTGRESQL,
-        HardSkills.AWS,
-        HardSkills.DOCKER
+        HardSkills.TYPESCRIPT,
+        HardSkills.AGILE
       ]),
       requisitosSoftSkills: JSON.stringify([
+        SoftSkills.CRIATIVIDADE,
         SoftSkills.COMUNICACAO,
-        SoftSkills.TRABALHO_EQUIPE,
-        SoftSkills.LIDERANCA,
-        SoftSkills.RESOLUCAO_PROBLEMAS
+        SoftSkills.EMPATIA,
+        SoftSkills.PENSAMENTO_CRITICO
       ])
     }
   });
@@ -108,12 +109,12 @@ async function main() {
     data: {
       curriculoId: curriculo.id,
       vagaId: vaga.id,
-      porcentagemCompatibilidade: 85,
-      palavrasChaveFaltando: JSON.stringify(['MongoDB', 'CI/CD']),
+      porcentagemCompatibilidade: 90,
+      palavrasChaveFaltando: JSON.stringify(['Sketch', 'Design Sprint']),
       sugestoesMelhoria: JSON.stringify([
-        'Adicionar experiência com MongoDB',
-        'Incluir projetos com CI/CD',
-        'Detalhar mais as experiências de liderança'
+        'Adicionar experiência com Sketch',
+        'Incluir facilitação de Design Sprints',
+        'Detalhar projetos de design system'
       ]),
       data: new Date()
     }

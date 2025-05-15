@@ -3,11 +3,12 @@ import type { Request as ExpressRequest, Response, NextFunction } from 'express'
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
-import { router as usuarioRoutes } from './routes/usuarioRoutes';
-import { router as curriculoRoutes } from './routes/curriculoRoutes';
-import { router as vagaRoutes } from './routes/vagaRoutes';
-import { router as candidaturaRoutes } from './routes/candidaturaRoutes';
-import { router as analiseRoutes } from './routes/analiseRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
+import curriculoRoutes from './routes/curriculoRoutes';
+import vagaRoutes from './routes/vagaRoutes';
+import candidaturaRoutes from './routes/candidaturaRoutes';
+import analiseRoutes from './routes/analiseRoutes';
+import authRoutes from './routes/authRoutes';
 // Configuração das variáveis de ambiente
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use((req: ExpressRequest, res: Response, next: NextFunction) => {
 });
 
 // Rotas
+app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/curriculos', curriculoRoutes);
 app.use('/api/vagas', vagaRoutes);
