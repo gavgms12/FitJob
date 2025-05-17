@@ -32,7 +32,7 @@ model CaracteristicaVaga {
   localizacao         String
   salarioDesejadoMin  Float
   salarioDesejadoMax  Float
-  usuario             Usuario  @relation(fields: [usuarioId], references: [id])
+  usuario             Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
 
 model Curriculo {
@@ -43,7 +43,7 @@ model Curriculo {
   softSkills   String   // Armazenado como JSON
   criadoEm     DateTime @default(now())
   
-  usuario      Usuario @relation(fields: [usuarioId], references: [id])
+  usuario      Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   candidaturas Candidatura[]
   resultadosAnalise ResultadoAnalise[]
 }
@@ -86,8 +86,8 @@ model Candidatura {
   status            String
   resultadoAnaliseId String? @unique
   
-  usuario           Usuario @relation(fields: [usuarioId], references: [id])
-  curriculo         Curriculo @relation(fields: [curriculoId], references: [id])
+  usuario           Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  curriculo         Curriculo @relation(fields: [curriculoId], references: [id], onDelete: Cascade)
   vaga              Vaga @relation(fields: [vagaId], references: [id])
   resultadoAnalise  ResultadoAnalise? @relation(fields: [resultadoAnaliseId], references: [id])
 }

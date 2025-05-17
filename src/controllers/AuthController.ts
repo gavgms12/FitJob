@@ -1,86 +1,85 @@
-import { Response } from 'express';
-import { sign } from 'jsonwebtoken';
-import { compare } from 'bcryptjs';
-import UsuarioRepository from '../repositories/UsuarioRepository';
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+import jwt from 'jsonwebtoken';
+import argon2 from 'argon2';
+import * as authRepository from '../repositories/AuthRepository';
 import { CustomRequest } from '../types/express';
 
-class AuthController {
-  private readonly JWT_SECRET = process.env.JWT_SECRET || 'fitjob-default-secret';
-  private readonly JWT_EXPIRATION = '1d';
+const prisma = new PrismaClient();
 
-  async login(req: CustomRequest, res: Response): Promise<Response> {
-    try {
-      const { email, senha } = req.body;
+export const loginController = async (req: Request, res: Response): Promise<void> => {
+  const { email, senha } = req.body;
 
-      if (!email || !senha) {
-        return res.status(400).json({ error: 'Email e senha são obrigatórios' });
-      }
-
-      const usuario = await UsuarioRepository.findByEmail(email);
-
-      if (!usuario) {
-        return res.status(401).json({ error: 'Email ou senha incorretos' });
-      }
-
-      const senhaCorreta = await compare(senha, usuario.senha);
-
-      if (!senhaCorreta) {
-        return res.status(401).json({ error: 'Email ou senha incorretos' });
-      }
-
-      const token = sign(
-        { 
-          userId: usuario.id,
-          email: usuario.email 
-        },
-        this.JWT_SECRET,
-        {
-          expiresIn: this.JWT_EXPIRATION,
-        }
-      );
-
-      return res.json({
-        user: {
-          id: usuario.id,
-          nome: usuario.nome,
-          email: usuario.email
-        },
-        token
-      });
-    } catch (error) {
-      console.error('Erro no login:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+  if (!email || !senha) {
+    res.status(400).json({ message: 'Email e senha são obrigatórios.' });
+    return;
   }
 
-  async verificarToken(req: CustomRequest, res: Response): Promise<Response> {
-    try {
-      // O middleware de autenticação já verificou o token
-      // e adicionou o usuário ao request
-      const userId = req.user?.id;
-      
-      if (!userId) {
-        return res.status(401).json({ error: 'Token inválido' });
-      }
+  const usuario = await authRepository.findUserByEmail(email);
 
-      const usuario = await UsuarioRepository.findById(userId);
-
-      if (!usuario) {
-        return res.status(401).json({ error: 'Usuário não encontrado' });
-      }
-
-      return res.json({
-        user: {
-          id: usuario.id,
-          nome: usuario.nome,
-          email: usuario.email
-        }
-      });
-    } catch (error) {
-      console.error('Erro ao verificar token:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+  if (!usuario) {
+    res.status(401).json({ message: 'Usuário não encontrado.' });
+    return;
   }
-}
 
-export default new AuthController(); 
+  try {
+    const senhaValida = await argon2.verify(usuario.senha, senha);
+    
+    if (!senhaValida) {
+      res.status(401).json({ message: 'Senha inválida.' });
+      return;
+    }
+
+    const token = jwt.sign(
+      {
+        userId: usuario.id,
+        email: usuario.email,
+        nome: usuario.nome
+      },
+      process.env.JWT_SECRET || 'fitjob-default-secret',
+      { expiresIn: '1h' }
+    );
+
+    res.json({
+      message: 'Login realizado com sucesso!',
+      token,
+      user: {
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao verificar senha:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+};
+
+export const verificarToken = async (req: CustomRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      res.status(401).json({ message: 'Token inválido.' });
+      return;
+    }
+
+    const usuario = await authRepository.findUserById(userId);
+
+    if (!usuario) {
+      res.status(401).json({ message: 'Usuário não encontrado.' });
+      return;
+    }
+
+    res.json({
+      user: {
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao verificar token:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+}; 

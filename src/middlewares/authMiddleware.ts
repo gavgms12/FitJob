@@ -1,38 +1,42 @@
-import { Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import { CustomRequest } from '../types/express';
 
-interface TokenPayload {
-  userId: string;
-  email: string;
-  iat: number;
-  exp: number;
-}
-
-export default function authMiddleware(
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-): Response | void {
+const authMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ error: 'Token não fornecido' });
   }
 
-  const [, token] = authHeader.split(' ');
+  const parts = authHeader.split(' ');
+
+  if (parts.length !== 2) {
+    return res.status(401).json({ error: 'Token mal formatado' });
+  }
+
+  const [scheme, token] = parts;
+
+  if (!/^Bearer$/i.test(scheme)) {
+    return res.status(401).json({ error: 'Token mal formatado' });
+  }
 
   try {
-    const decoded = verify(token, process.env.JWT_SECRET || 'fitjob-default-secret');
-    const { userId, email } = decoded as TokenPayload;
-
-    req.user = {
-      id: userId,
-      email
-    };
+    const secret = process.env.JWT_SECRET || 'sua_chave_secreta';
+    const decoded = jwt.verify(token, secret);
+    
+    if (typeof decoded === 'object') {
+      req.user = {
+        id: decoded.id,
+        email: decoded.email,
+        nome: decoded.nome
+      };
+    }
 
     return next();
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({ error: 'Token inválido' });
   }
-} 
+};
+
+export default authMiddleware; 

@@ -1,9 +1,12 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 import { CustomRequest } from '../types/express';
 import CurriculoRepository, { CreateCurriculoDTO, UpdateCurriculoDTO } from '../repositories/CurriculoRepository';
 import UsuarioRepository from '../repositories/UsuarioRepository';
 import { HardSkills } from '../models/enums/HardSkills';
 import { SoftSkills } from '../models/enums/SoftSkills';
+
+const prisma = new PrismaClient();
 
 class CurriculoController {
   async criar(req: CustomRequest, res: Response): Promise<Response> {

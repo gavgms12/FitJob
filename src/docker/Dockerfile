@@ -1,38 +1,28 @@
-FROM node:18-alpine AS builder
+FROM node:18
 
-# Defining the working directory inside the container
 WORKDIR /app
 
-# Copying package.json and tsconfig.json files
-COPY package*.json tsconfig*.json ./
+# Copiar arquivos de configuração primeiro
+COPY package*.json ./
+COPY tsconfig*.json ./
 
-# Installing dependencies
+# Instalar dependências
 RUN npm ci
 
-# Copying the source code
+# Copiar o schema do Prisma
+COPY prisma ./prisma/
+
+# Copiar o resto do código
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate --schema=./db/prisma/schema.prisma || true
+# Gerar o Prisma Client
+RUN npx prisma generate
 
-# Build the application
+# Construir a aplicação
 RUN npm run build
 
-# 2) Production stage
-FROM node:18-alpine AS runner
+# Expor a porta
+EXPOSE 3500
 
-WORKDIR /app
-
-# Set the environment variable to production
-ENV NODE_ENV=production
-
-# Copying only the necessary files for production
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Copying the built application from the builder stage
-COPY --from=builder /app/dist ./dist
-
-# Copying the public directory
-EXPOSE 3000
-CMD ["node", "dist/main.ts"]
+# Comando para iniciar a aplicação
+CMD ["sh", "-c", "npx prisma generate && npm run dev"]

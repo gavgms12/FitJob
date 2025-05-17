@@ -2,6 +2,7 @@ import { Curriculo } from '../Curriculo';
 import { Vaga } from '../Vaga';
 import { ResultadoAnalise } from '../ResultadoAnalise';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 dotenv.config();
 

@@ -6,7 +6,8 @@ services:
     env_file:
       - .env
     ports:
-      - "3000:3000"
+      - "3500:3500"
+      - "5555:5556"
     depends_on:
       - db
 
